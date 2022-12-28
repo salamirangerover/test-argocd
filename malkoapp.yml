@@ -1,0 +1,56 @@
+---
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: wordpress
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: wordpress
+    targetRevision: "15.2.2"
+    helm:
+      values: |
+        wordpressUsername: admin
+        wordpressPassword: qwerty
+
+        wordpressFirstName: Malko
+        wordpressLastName: App
+        wordpressBlogName: Blog
+
+        service:
+          type: ClusterIP
+
+        mariadb:
+          enabled: true
+          architecture: standalone
+          auth:
+            rootPassword: "mariadb"
+            database: bitnami_wordpress
+            username: bn_wordpress
+            password: "mariadb"
+          primary:
+            persistence:
+              enabled: true
+              storageClass: nfs-client
+              accessModes:
+                - ReadWriteOnce
+              size: 5Gi
+
+        memcached:
+          enabled: true
+          auth:
+            enabled: true
+            username: "admin"
+            password: "qwerty"
+
+  destination:
+    namespace: default
+    server: https://10.70.0.13:6443
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
