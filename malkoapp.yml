@@ -49,48 +49,7 @@ spec:
 
   destination:
     namespace: default
-    server: project: default
-source:
-  repoURL: 'https://charts.bitnami.com/bitnami'
-  targetRevision: 15.2.2
-  helm:
-    values: |
-      wordpressUsername: admin
-      wordpressPassword: qwerty
-      wordpressFirstName: Malko
-      wordpressLastName: App
-      wordpressBlogName: Blog
-      service:
-        type: ClusterIP
-      mariadb:
-        enabled: true
-        architecture: standalone
-        auth:
-          rootPassword: "mariadb"
-          database: bitnami_wordpress
-          username: bn_wordpress
-          password: "mariadb"
-        primary:
-          persistence:
-            enabled: true
-            storageClass: standart-rwo
-            accessModes:
-              - ReadWriteOnce
-            size: 5Gi
-      memcached:
-        enabled: true
-        auth:
-          enabled: true
-          username: "admin"
-          password: "qwerty"
-  chart: wordpress
-destination:
-  server: https://kubernetes.default.svc
-  namespace: default
-syncPolicy:
-  automated:
-    prune: true
-    selfHeal: true
+    server: https://kubernetes.default.svc    
 
   syncPolicy:
     automated:
